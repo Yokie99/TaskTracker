@@ -1,5 +1,4 @@
 import { saveToLocalStorage, getlocalStorage, removeFromLocalStorage } from "./localstorage.js";
-let addTaskBtn = document.getElementById('addTaskBtn');
 
 let appendToDo = document.getElementById('appendToDo');
 let appendInPro = document.getElementById('appendInPro');
@@ -21,12 +20,11 @@ let todoCountVar = 0;
 let inProCountVar = 0;
 let compCountVar = 0;
 
-
-
+let index = 0;
 
 createTask();
 
-saveBtn.addEventListener('click', async () => {
+saveBtn.addEventListener('click', () => {
     let saveArr = {};
     saveArr.name = nameInput.value;
     saveArr.desc = descInput.value;
@@ -38,7 +36,27 @@ saveBtn.addEventListener('click', async () => {
 
 
 
-function makeElement(name, desc, priority, status) {
+
+
+function createTask() {
+    appendToDo.textContent = "";
+    appendInPro.textContent = "";
+    appendComp.textContent = "";
+
+    let tasks = getlocalStorage()
+
+    const taskArray = Object.values(tasks);
+    console.log(taskArray);
+    taskArray.map(element => {
+        console.log();
+        makeElement(element.name, element.desc, element.priority, element.status, index);
+    })
+
+
+}
+
+
+function makeElement(name, desc, priority, status, index) {
     let outDiv = document.createElement('div');
     outDiv.className = ("flex justify-center mb-10");
 
@@ -63,7 +81,7 @@ function makeElement(name, desc, priority, status) {
     inDiv.append(viewBtn);
     outDiv.append(inDiv);
 
-    let modal = createNewTaskModal(name, desc);
+    let modal = createNewTaskModal(name, desc, index);
     outDiv.append(modal);
 
     switch (status) {
@@ -87,32 +105,15 @@ function makeElement(name, desc, priority, status) {
         default:
             break
     }
-}
-
-function createTask() {
-    appendToDo.textContent = "";
-    appendInPro.textContent = "";
-    appendComp.textContent = "";
-
-    let tasks = getlocalStorage()
-
-    const taskArray = Object.values(tasks);
-    console.log(taskArray);
-    taskArray.map(element => {
-        console.log();
-        makeElement(element.name, element.desc, element.priority, element.status);
-    })
-
 
 }
 
-
-function createNewTaskModal(taskName, taskDesc) {
+function createNewTaskModal(taskName, taskDesc, index) {
     // Create the main div element
     var newTaskModal = document.createElement('div');
     newTaskModal.id = taskName;
 
-    newTaskModal.setAttribute('tabindex', '-1');
+    newTaskModal.setAttribute('tabindex', index);
     newTaskModal.setAttribute('aria-hidden', 'true');
     newTaskModal.classList.add('hidden', 'overflow-y-auto', 'overflow-x-hidden', 'fixed', 'top-0', 'right-0', 'left-0', 'z-50', 'justify-center', 'items-center', 'w-full', 'md:inset-0', 'h-[calc(100%-1rem)]', 'max-h-full');
 
