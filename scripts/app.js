@@ -26,12 +26,19 @@ createTask();
 
 saveBtn.addEventListener('click', () => {
     let saveArr = {};
-    saveArr.name = nameInput.value;
+    if(nameInput.value){
+     saveArr.name = nameInput.value;
     saveArr.desc = descInput.value;
     saveArr.priority = prioElement.value;
     saveArr.status = statusElement.value;
     saveToLocalStorage(saveArr);
-    createTask();
+    createTask();  
+    alert("TASK SAVED") 
+    }
+    else{
+        alert("Please give the task a name!")
+    }
+    
 })
 
 
@@ -61,7 +68,21 @@ function makeElement(name, desc, priority, status, index) {
     outDiv.className = ("flex justify-center mb-10");
 
     let inDiv = document.createElement('div');
-    inDiv.className = ("bg-blue-500 w-96 h-auto rounded-lg p-4");
+    switch (priority) {
+        case "low":
+            inDiv.className = ("bg-green-800 w-96 h-auto rounded-lg p-4");
+
+            break;
+        case "medium":
+            inDiv.className = ("bg-orange-500 w-96 h-auto rounded-lg p-4");
+            break;
+        case "high":
+            inDiv.className = ("bg-red-700 w-96 h-auto rounded-lg p-4");
+            break;
+
+        default:
+            break
+    }
 
     let pName = document.createElement('p');
     pName.className = ("pb-10");
